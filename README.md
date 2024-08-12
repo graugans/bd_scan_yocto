@@ -10,7 +10,7 @@ If you have comments or issues, please raise a GitHub issue here. Synopsys suppo
 # INTRODUCTION
 ### OVERVIEW OF BD_SCAN_YOCTO
 
-This `bd_scan_yocto.py` script is a utility intended to scan Yocto projects in Synopsys Black Duck. It examines the Yocto project and environment and then uses Synopsys Detect to perform multiple scans, with additional actions to optimise the scan result to produce a more comprehensive scan than previous methods.
+This `bd_scan_yocto.py` script is a utility intended to scan Yocto projects in Synopsys Black Duck. It examines the Yocto project and environment and then uses Synopsys Detect to perform multiple scans, with additional actions to optimize the scan result to produce a more comprehensive scan than previous methods.
 
 Synopsys Detect is the default scan utility for Black Duck and includes support for Yocto projects. However, Synopsys Detect Yocto scans will only identify standard recipes obtained from Openembedded.org, and will not cover modified or custom recipes, recipes moved to new layers or where package versions or revisions have been changed. Copyright and deep license data is also not supported for Synopsys Detect Yocto scans, as well as snippet or other scanning of code within custom recipes. 
 
@@ -55,14 +55,14 @@ The script must be executed on a Linux workstation where Yocto has been installe
 
 ### BD_SCAN_YOCTO SCAN BEHAVIOUR
 
-The automatic scan behaviour of `bd_scan_yocto` is described below:
+The automatic scan behavior of `bd_scan_yocto` is described below:
 1. Locate the OE initialization script in the invocation folder (bypass if --no_init_script used).
 2. Extract information from the Bitbake environment (by running `bitbake -e` and optionally `bitbake-layers show-recipes` if layer specific options are specified)
 3. Run Synopsys Detect in Bitbake dependency scan mode to extract the standard OE recipes/dependencies (skipped if `--skip_detect_for_bitbake` option is used) to create the specified Black Duck project & version
 4. Locate the software components and rpm/ipk/deb packages downloaded during the build, and copy those matching the recipes in license.manifest to a temporary folder (if the option `--exclude_layers layer1,layer2` is applied then skip recipes within the specified layers)
 5. If the option `--extended_scan_layers layer1,layer2` is specified with a list of layers, then expand (decompress) the archives for the recipes in the listed layers. 
 6. Run a Signature scan using Synopsys Detect on the copied/expanded and rpm/ipk/deb packages and append to the specified Black Duck project. If `--snippet` is specified then add snippet scanning, adding other Detect scan options with the `--detect_opts` option (for example, local copyright and license scanning with the option `--detect_opts '--detect.blackduck.signature.scanner.license.search=true --detect.blackduck.signature.scanner.copyright.search=true'`)
-7. Wait for scan completion, and then post-process the project version BOM to remove identified subcomponents from the unexpanded archives and rpm packages only. This step is required because Signature scanning can sometimes match a complete package, but continue to scan at lower levels to find embedded OSS components which can lead to false-positive matches, although this behaviour is useful for custom recipes (hence why expanded archives are excluded from this process)
+7. Wait for scan completion, and then post-process the project version BOM to remove identified subcomponents from the unexpanded archives and rpm packages only. This step is required because Signature scanning can sometimes match a complete package, but continue to scan at lower levels to find embedded OSS components which can lead to false-positive matches, although this behavior is useful for custom recipes (hence why expanded archives are excluded from this process)
 8. Optionally identify locally patched CVEs and apply to BD project
 
 ### COMPARING BD_SCAN_YOCTO AGAINST IMPORT_YOCTO_BM
@@ -219,7 +219,7 @@ The `bd_scan_yocto` parameters for command line usage are shown below:
      --no_unmap            Do not unmap existing scans from the project on rescan
 
 
-The script needs to be executed in the Yocto project folder (e.g. `yocto_zeus/poky`) where the OE initialisation script is located (for example `oe-init-build-env`).
+The script needs to be executed in the Yocto project folder (e.g. `yocto_zeus/poky`) where the OE initialization script is located (for example `oe-init-build-env`).
 
 The `--project` and `--version` options are required to define the Black Duck project and version names as well as the Black Duck server URL and API key to upload results.
 
@@ -346,7 +346,7 @@ For a custom C/C++ recipe, or where other languages and package managers are use
 
 For C/C++ recipes, the advanced [blackduck_c_cpp](https://pypi.org/project/blackduck-c-cpp/) utility could be used as part of the build to identify the compiled sources, system includes and operating system dependencies. You would need to modify the build command for the recipe to call the `blackduck-c-cpp` utility as part of a scanning cycle after it had been configured to connect to the Black Duck server.
 
-For recipes where a package manager is used, then a standard Synopsys Detect scan in DETECTOR mode could be utilised to analyse the project dependencies separately.
+For recipes where a package manager is used, then a standard Synopsys Detect scan in DETECTOR mode could be utilized to analyze the project dependencies separately.
 
 Multiple scans can be combined into the same Black Duck project (ensure to use the Synopsys Detect option `--detect.project.codelocation.unmap=false` to stop previous scans from being unmapped).
 
@@ -405,7 +405,7 @@ The identification of the Linux Kernel version from the Bitbake recipes and asso
 7. My environment is not completely set inside the oe-init script (or I am using another Yocto wrapper such as KAS https://kas.readthedocs.io/)
 
    _Synopsys Detect calls the oe-init script in a sub-shell before running Bitbake, meaning that it is not possible to pass environmental values unless they are in the oe-init script.
-   The --no_init_script option allows the bd_scan_yocto script to bypass the use of the oe-init sceript, but you will also need to specify the --skip_detect_for_bitbake option to skip the Detect Bitbake scan_
+   The --no_init_script option allows the bd_scan_yocto script to bypass the use of the oe-init script, but you will also need to specify the --skip_detect_for_bitbake option to skip the Detect Bitbake scan_
 
 
 # UPDATE HISTORY
